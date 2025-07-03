@@ -2,6 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const router = express.Router();
 const Patient = require('../models/Patient');
+const protect = require('../middlewares/authMiddleware')
 
 // Validation Rules
 const validatePatient = [
@@ -22,7 +23,7 @@ const handleValidation = (req, res, next) => {
 };
 
 // CREATE
-router.post('/', validatePatient, handleValidation, async (req, res, next) => {
+router.post('/', protect, validatePatient, handleValidation, async (req, res, next) => {
   try {
     const patient = new Patient(req.body);
     const saved = await patient.save();
@@ -33,7 +34,7 @@ router.post('/', validatePatient, handleValidation, async (req, res, next) => {
 });
 
 // READ ALL
-router.get('/', async (req, res, next) => {
+router.get('/', protect, async (req, res, next) => {
   try {
     const patients = await Patient.find();
     res.json(patients);
@@ -43,7 +44,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // READ ONE
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', protect, async (req, res, next) => {
   try {
     const patient = await Patient.findById(req.params.id);
     if (!patient) return res.status(404).json({ message: 'Patient not found' });
@@ -54,7 +55,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // UPDATE
-router.put('/:id', validatePatient, handleValidation, async (req, res, next) => {
+router.put('/:id', protect, validatePatient, handleValidation, async (req, res, next) => {
   try {
     const updated = await Patient.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updated) return res.status(404).json({ message: 'Patient not found' });
@@ -65,7 +66,7 @@ router.put('/:id', validatePatient, handleValidation, async (req, res, next) => 
 });
 
 // DELETE
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', protect, async (req, res, next) => {
   try {
     const deleted = await Patient.findByIdAndDelete(req.params.id);
     if (!deleted) return res.status(404).json({ message: 'Patient not found' });
