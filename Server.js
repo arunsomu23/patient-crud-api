@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const patientRoutes = require('./routes/patientRoutes');
 const authRoutes = require('./routes/authRoutes');
+const PatientListRoutes = require('./routes/PatientListRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 
 dotenv.config();
@@ -11,6 +12,7 @@ const app = express();
 app.use(express.json());
 app.use('/api/patients', patientRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/patientList', PatientListRoutes);
 
 // Error-handling middleware
 app.use(errorHandler);

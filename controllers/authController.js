@@ -2,15 +2,20 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
 const generateToken = (user) => {
-  return jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
+    expiresIn: '1h'
+  });
 };
+
 
 exports.register = async (req, res, next) => {
   try {
-    const user = await User.create(req.body);
+    const { username, password, role } = req.body;
+    const user = await User.create({ username, password, role });
+    //const user = await User.create(req.body);
     const token = generateToken(user);
-   // res.status(201).json({ token });
-    res.status(201).json({ message: 'Registered successfully' });
+    res.status(201).json({ token });
+    //res.status(201).json({ message: 'Registered successfully' });
   } catch (err) {
     next(err);
   }
