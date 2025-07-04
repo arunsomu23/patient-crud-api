@@ -1,6 +1,10 @@
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: 'standalone', // Or 'standalone' if you're using Node API routes
+    output: 'standalone', // Supports API routes & dynamic routing
     trailingSlash: true,
+    experimental: {
+      serverActions: true,
+    },
   };
   
   module.exports = nextConfig;
