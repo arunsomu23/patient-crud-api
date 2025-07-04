@@ -16,6 +16,13 @@ app.get('/', (req, res) => {
 });
 
 
+const cors = require('cors');
+app.use(cors({
+  origin: 'https://mypatientapp.netlify.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true // only if sending cookies or Auth headers
+}));
+
 app.use('/api/patients', patientRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/patientList', PatientListRoutes);
